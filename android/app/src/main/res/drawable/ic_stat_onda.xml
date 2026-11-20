@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Onda mark (ring + two waves) as a white glyph: the notification / status-bar small icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="84"
+    android:viewportHeight="84">
+    <path
+        android:pathData="M8,42a34,34 0 1,0 68,0a34,34 0 1,0 -68,0"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="5.5"
+        android:strokeAlpha="0.55" />
+    <path
+        android:pathData="M14,46c7,-14 14,-14 21,0s14,14 21,0 10,-10 14,-4"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M14,32c7,-10 14,-10 21,0s14,10 21,0 10,-7 14,-3"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="5.5"
+        android:strokeLineCap="round" />
+</vector>

@@ -1,0 +1,46 @@
+Onda is a fast, private music player for the songs already on your phone. No account, no ads, no tracking, no subscription. It works fully offline from the first launch.
+
+PLAYING
+- Gapless playback that keeps going with the screen off
+- Notification and lock-screen controls with cover art, plus a home-screen widget
+- 10-band equalizer with presets, playback speed and a sleep timer with fade-out
+- Repeat all, repeat one, shuffle and an editable queue
+- Force audio: keep playing even when other apps try to pause you
+- Left and right earphone balance
+- Car mode with huge buttons
+- A chime when you finish an album
+
+YOUR LIBRARY
+- Finds your songs automatically and keeps up as you add or delete them
+- Tidies messy tags, so Hip-Hop, Hip Hop and hip hop become one genre
+- Covers from your own files first; online covers only fill the gaps
+- Artist pages with photos, bios and top songs
+- Fix wrongly tagged albums: Onda matches your files to the right release and writes the tags into them
+- Hold to select songs, albums, artists or playlists, then add, fix, share or delete
+
+PLAYLISTS AND MIXES
+- Your own playlists and Smart Playlists that fill themselves from rules
+- Daily Mixes, On Repeat, Discovery, Rewind, Hidden Gems, Hits, New Music, Deep Cuts, Workout, Wind Down and more
+
+LYRICS
+- Synced and plain lyrics, saved on your phone
+- Hold lines and press Loop to repeat a section
+
+LISTENING STATS
+- Time listened by day, week, month, year or all time, with streaks
+- Top artists, songs, albums and genres
+- Optional Last.fm connection to import your history
+
+LIGHT ON BATTERY AND DATA
+- Background jobs rest, and stop when the screen is off
+- Save mobile data: no background downloads on mobile data
+- Covers, lyrics and artist info are fetched only when online features are on, and you can turn them off
+
+MAKE IT YOURS
+- 14 colour themes, black system bars, landscape layout
+- Backup and restore of favourites, playlists, stats and settings
+
+PRIVACY
+Onda has no account, no ads and no analytics. Your music and library stay on your phone. When online features are on, only song, artist and album names are sent to public music databases (MusicBrainz, Cover Art Archive, LRCLIB, TheAudioDB, Deezer, iTunes Search, Wikipedia, Last.fm, fanart.tv) to fetch covers, lyrics and artist info. Turn them off in Settings.
+
+Needs permission to read your music files.

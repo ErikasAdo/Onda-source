@@ -1,0 +1,13 @@
+node_modules/
+ios/
+# android/ IS committed (F-Droid builds from it); only its build output is ignored
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/captures/
+*.apk
+*.jks
+.DS_Store
+*.log
+.wrangler/

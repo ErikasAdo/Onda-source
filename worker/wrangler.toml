@@ -1,0 +1,19 @@
+name = "onda-proxy"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+# Secrets (never commit keys):
+#   npx wrangler secret put FANART_API_KEY
+#   npx wrangler secret put UNSPLASH_ACCESS_KEY
+#   npx wrangler secret put LASTFM_API_KEY      # optional — enables genre fill-in
+#   npx wrangler secret put MASTER_SECRET       # any long random string — turns on per-install keys
+#
+# Optional but recommended: permanent, worldwide key blocks
+#   npx wrangler kv namespace create BLOCKS     # then paste the id below
+# [[kv_namespaces]]
+# binding = "BLOCKS"
+# id = "PASTE-ID-HERE"
+#
+# Optional: replace the default Capacitor/localhost allow-list
+# [vars]
+# ALLOWED_ORIGINS = "capacitor://localhost,https://localhost"
