@@ -1,4 +1,4 @@
-Onda is a fast, private music player for the songs already on your phone. No account, no ads, no tracking, no subscription. It works fully offline from the first launch.
+Onda gives the music already on your phone the features of a streaming app: synced lyrics, artist pages, Daily Mixes, Smart Playlists and listening stats. No account, no ads, no tracking, no subscription. It works fully offline from the first launch.
 
 PLAYING
 - Gapless playback that keeps going with the screen off

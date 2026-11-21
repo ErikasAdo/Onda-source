@@ -21,10 +21,21 @@
   const isNative = !!(Cap && typeof Cap.isNativePlatform === 'function' && Cap.isNativePlatform());
   const DB = g.OndaDB;
   const DAY = 864e5;
-  const UA = 'Onda/1.0.0 ( https://onda.app )';
-  const PROXY = /^https?:\/\//.test(CFG.PROXY_BASE || '') && !/YOUR-SUBDOMAIN/.test(CFG.PROXY_BASE) ? CFG.PROXY_BASE.replace(/\/+$/, '') : '';
-  const LFM = /^https?:\/\//.test(CFG.LASTFM_BASE || CFG.UNSPLASH_BASE || '') ? (CFG.LASTFM_BASE || CFG.UNSPLASH_BASE).replace(/\/+$/, '') : '';
-  const UNS = /^https?:\/\//.test(CFG.UNSPLASH_BASE || '') ? CFG.UNSPLASH_BASE.replace(/\/+$/, '') : '';
+  const UA = 'Onda/1.0.0 ( https://github.com/ErikasAdo/Onda-source )';
+  /* ── the user's own keys / proxy (Settings → Own API keys & proxy). Stored only on this phone under "onda_custom",
+        never in backups, never sent to the developer. When ON, Onda stops using the developer's server completely. ── */
+  let OWN = null;
+  try { const o = JSON.parse(g.localStorage.getItem('onda_custom') || 'null'); if (o && o.on === true) OWN = o; } catch (e) { OWN = null; }
+  const ownKey = (k, min) => { const v = String(k || '').trim(); return new RegExp('^[A-Za-z0-9_-]{' + min + ',64}$').test(v) ? v : ''; };
+  const ownUrl = u => { try { const x = new URL(String(u || '').trim()); return x.protocol === 'https:' && !x.username && !x.password && !x.search && !x.hash ? x.origin + x.pathname.replace(/\/+$/, '') : ''; } catch (e) { return ''; } };
+  const OWN_PROXY = OWN ? ownUrl(OWN.proxy) : '';
+  const OWN_LFM = OWN ? ownKey(OWN.lastfm, 8) : '';
+  const FANART_KEY = OWN ? ownKey(OWN.fanart, 8) : (CFG.FANART_KEY || '');
+  const ADB_KEY = OWN ? (ownKey(OWN.audiodb, 3) || '123') : (CFG.AUDIODB_KEY || '123');
+  const LFM_DIRECT = !!(OWN && OWN_LFM && !OWN_PROXY);   // your own Last.fm key, straight to Last.fm
+  const PROXY = OWN ? OWN_PROXY : (/^https?:\/\//.test(CFG.PROXY_BASE || '') && !/YOUR-SUBDOMAIN/.test(CFG.PROXY_BASE) ? CFG.PROXY_BASE.replace(/\/+$/, '') : '');
+  const LFM = OWN ? OWN_PROXY : (/^https?:\/\//.test(CFG.LASTFM_BASE || CFG.UNSPLASH_BASE || '') ? (CFG.LASTFM_BASE || CFG.UNSPLASH_BASE).replace(/\/+$/, '') : '');
+  const UNS = OWN ? OWN_PROXY : (/^https?:\/\//.test(CFG.UNSPLASH_BASE || '') ? CFG.UNSPLASH_BASE.replace(/\/+$/, '') : '');
   const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   let Http = null;
@@ -36,22 +47,22 @@
   const DIRECT = {
     mb: 'https://musicbrainz.org/ws/2/',
     caa: 'https://coverartarchive.org/',
-    adb: 'https://www.theaudiodb.com/api/v1/json/' + (CFG.AUDIODB_KEY || '123') + '/',
+    adb: 'https://www.theaudiodb.com/api/v1/json/' + ADB_KEY + '/',
     lrclib: 'https://lrclib.net/api/',
     fanart: 'https://webservice.fanart.tv/v3/',
   };
   function urlFor(kind, path) {
     if (PROXY) return PROXY + '/' + kind + '/' + path;
-    if (kind === 'fanart' && !CFG.FANART_KEY && LFM) return LFM + '/fanart/' + path;     // the Worker holds the Fanart.tv key
+    if (kind === 'fanart' && !FANART_KEY && LFM) return LFM + '/fanart/' + path;     // the Worker holds the Fanart.tv key
     let u = DIRECT[kind] + path;
-    if (kind === 'fanart') u += (u.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(CFG.FANART_KEY || '');
+    if (kind === 'fanart') u += (u.includes('?') ? '&' : '?') + 'api_key=' + encodeURIComponent(FANART_KEY);
     return u;
   }
   const https = u => (u ? String(u).replace(/^http:\/\//i, 'https://') : u);
 
 
   /* ── per-install key (the Worker's "2FA"): registered once, HMAC-signed per minute ───────────── */
-  const WORKER_ORIGINS = Array.from(new Set([PROXY, LFM, UNS].filter(Boolean).map(u => { try { return new URL(u).origin; } catch (e) { return ''; } }).filter(Boolean)));
+  const WORKER_ORIGINS = OWN ? [] : Array.from(new Set([PROXY, LFM, UNS].filter(Boolean).map(u => { try { return new URL(u).origin; } catch (e) { return ''; } }).filter(Boolean)));
   const isWorker = url => { for (let i = 0; i < WORKER_ORIGINS.length; i++) if (url.indexOf(WORKER_ORIGINS[i] + '/') === 0) return true; return false; };
   const LS = { get(k) { try { return g.localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { g.localStorage.setItem(k, v); } catch (e) { /* private mode */ } }, del(k) { try { g.localStorage.removeItem(k); } catch (e) { /* ignore */ } } };
   const enc = new TextEncoder();
@@ -64,7 +75,7 @@
   function keyEvent(type) { try { g.dispatchEvent(new CustomEvent('onda-key', { detail: type })); } catch (e) { /* ignore */ } }
   /** get (or create) this install's key. Resolves to a record, or null when the Worker runs open / is unreachable. */
   function ensureKey(force) {
-    if (!PROXY && !LFM && !UNS) return Promise.resolve(null);
+    if (OWN || (!PROXY && !LFM && !UNS)) return Promise.resolve(null);
     if (KEY.open && !force) return Promise.resolve(null);
     if (KEY.blocked && !force) return Promise.resolve(null);
     if (KEY.rec && !force) return Promise.resolve(KEY.rec);
@@ -218,6 +229,7 @@
     get enabled() { return online; },
     setOnline(v) { online = !!v; },
     get hasProxy() { return !!PROXY; },
+    get customMode() { return !!OWN; },
     get hasUnsplash() { return !!UNS; },
     /** true when the internet really answers (not just "wifi connected"): a 4 s ping to the Worker's health route */
     async reachable() {
@@ -261,14 +273,14 @@
     },
 
     /* ═══ Last.fm (through the Worker — the key stays in the Worker as LASTFM_API_KEY) ═══ */
-    get hasLastfm() { return !!LFM && !lfmDead; },
+    get hasLastfm() { return (!!LFM || LFM_DIRECT) && !lfmDead; },
     get lastfmDead() { return lfmDead; },
     /** one call → parsed JSON, null when Last.fm doesn't know it. Marks itself dead when the Worker has no key (501) or the key is rejected. */
     async lfm(params) {                                   // → data | null (Last.fm doesn't know it) | undefined (network / busy — try again later)
-      if (!online || !LFM || lfmDead) return undefined;
+      if (!online || (!LFM && !LFM_DIRECT) || lfmDead) return undefined;
       const qs = Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
       let r;
-      try { r = await httpRetry(LFM + '/lastfm?' + qs, 'json', lfmGate); } catch (e) { return undefined; }
+      try { r = await httpRetry(LFM_DIRECT ? 'https://ws.audioscrobbler.com/2.0/?' + qs + (/(^|&)format=/.test(qs) ? '' : '&format=json') + '&api_key=' + encodeURIComponent(OWN_LFM) : LFM + '/lastfm?' + qs, 'json', lfmGate); } catch (e) { return undefined; }
       if (r.status === 501) { lfmDead = 'nokey'; return undefined; }
       if (r.status === 401 || r.status === 403) { lfmDead = 'badkey'; return undefined; }
       if (r.status === 404) return null;
@@ -305,7 +317,7 @@
         await Promise.all([
           // Last.fm
           (async () => {
-            if (!LFM || lfmDead) return;
+            if ((!LFM && !LFM_DIRECT) || lfmDead) return;
             asked++;
             const d = await Meta.lfm(Object.assign({ method: 'album.getInfo', album, autocorrect: 1 }, ar ? { artist: ar } : {}));
             if (d === undefined) { failed++; return; }
@@ -650,7 +662,7 @@
 
         // Fanart.tv (optional, needs a key or the proxy)
         try {
-          if (p.mbid && (PROXY || CFG.FANART_KEY || LFM)) {
+          if (p.mbid && (PROXY || FANART_KEY || LFM)) {
             const r = await httpRetry(urlFor('fanart', 'music/' + p.mbid), 'json');
             if (r.ok && r.data) {
               (r.data.artistthumb || []).slice(0, 3).forEach((x, i) => addImg('Photo ' + (i + 1), x.url, 'Fanart.tv'));
@@ -677,7 +689,7 @@
 
     /** Fan art for an artist as a Blob (Fanart.tv background → photo → banner; small "preview" size). null when there is none. */
     artistFanart(name) {
-      if (!online || !name || !(PROXY || CFG.FANART_KEY || LFM) || unknown(name)) return Promise.resolve(null);
+      if (!online || !name || !(PROXY || FANART_KEY || LFM) || unknown(name)) return Promise.resolve(null);
       return cached('fanimg|' + lc(name), 90 * DAY, async () => {
         const mbid = await Meta.lookupArtist(name);
         if (!mbid) return null;

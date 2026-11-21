@@ -1,13 +1,14 @@
-# DRAFT recipe for F-Droid (goes into the fdroiddata repo as metadata/com.erikasado.onda.yml).
-# Reviewers may ask for changes. Fill in WebSite after the site is live.
+# Recipe for F-Droid (goes into fdroiddata as metadata/com.erikasado.onda.yml).
+# Add WebSite: once the Vercel site address is known.
 
 Categories:
   - Multimedia
 License: GPL-3.0-or-later
 AuthorName: Erikas
-WebSite: https://REPLACE-WITH-YOUR-SITE.vercel.app
-SourceCode: https://github.com/ErikasAdo/Onda
-IssueTracker: https://github.com/ErikasAdo/Onda/issues
+Donate: https://t.me/ErikasAdo
+Bitcoin: bc1qqtujwqdshtvpzsx9zdfd7vlpkl0a0xuv8w7chc
+SourceCode: https://github.com/ErikasAdo/Onda-source
+IssueTracker: https://github.com/ErikasAdo/Onda-source/issues
 
 AntiFeatures:
   NonFreeNet:
@@ -16,7 +17,7 @@ AntiFeatures:
 AutoName: Onda
 
 RepoType: git
-Repo: https://github.com/ErikasAdo/Onda.git
+Repo: https://github.com/ErikasAdo/Onda-source.git
 
 Builds:
   - versionName: 1.0.0
@@ -26,7 +27,7 @@ Builds:
     sudo:
       - apt-get update
       - apt-get install -y nodejs npm
-    init: cd ../.. && npm ci --ignore-scripts
+    init: cd ../.. && npm install --ignore-scripts
     gradle:
       - yes
     scandelete:

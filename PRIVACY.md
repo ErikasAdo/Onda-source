@@ -1,9 +1,8 @@
 # Privacy policy for Onda
 
-## Effective 19 November 2026
+## Effective 21 November 2026
 
 This is the privacy policy for the Onda Android app (com.erikasado.onda). Onda has no accounts, so there is no account data to describe. Everything here is about what the app does with information on your phone and what it sends over the internet.
-
 
 ## Who we are
 
@@ -65,6 +64,12 @@ This is the privacy policy for the Onda Android app (com.erikasado.onda). Onda h
 - If a key is used abusively, the proxy records that key’s random identifier and the reason for up to 90 days so it stays blocked. It does not identify a person.
 - Cached public responses (such as an artist’s tags) are not tied to you. Cloudflare may keep its own standard operational logs under its privacy policy.
 
+## Your own API keys and proxy (optional, advanced)
+
+- Settings → Own API keys & proxy lets you enter your own Last.fm, fanart.tv and TheAudioDB keys, and the address of a proxy you run. It is off by default and shows a clear risk warning that you must accept first.
+- When it is on, Onda stops using our proxy completely: nothing is sent to us. Your keys are stored only on your phone, without encryption, in Onda’s app storage. They are not included in backups and are never sent to us.
+- Keys you enter are sent to the service they belong to (Last.fm, fanart.tv or TheAudioDB) with each request. A proxy you set receives the same lookups described above, plus your IP address and your Last.fm username if you connect it, and is outside our control. Only use a proxy you run yourself, over HTTPS. Turning the setting off deletes your keys and proxy address from the phone.
+
 ## Last.fm (optional)
 
 - If you enter a Last.fm username, Onda sends it through our proxy to Last.fm to read your public listening history, loved tracks and play counts, matches them to songs on your phone and stores the results on your phone.
@@ -102,11 +107,9 @@ This is the privacy policy for the Onda Android app (com.erikasado.onda). Onda h
 
 Cloudflare and the music services run servers in many countries, including outside the UK and EU. When online features are on, the names Onda sends may be processed wherever those services operate.
 
-
 ## Children
 
 Onda is not aimed at children under 13 and we do not knowingly collect personal information from them. Onda collects no personal information from anyone, apart from the exceptions explained above.
-
 
 ## Security
 
@@ -114,20 +117,17 @@ Onda is not aimed at children under 13 and we do not knowingly collect personal 
 - The Last.fm and fanart.tv secrets are kept on the server, never inside the app.
 - Requests to the proxy are signed with the install key, and abusive keys are blocked.
 - Your data on the phone sits in Android’s app sandbox.
+- If you choose to enter your own API keys, they are stored on your phone without encryption. Use free keys made only for Onda.
 - No system is perfectly secure, but Onda is designed to hold as little as possible.
 
 ## Third-party content
 
 Covers, artist pictures, lyrics and biographies in Onda come from public services and belong to their owners. Onda displays them for you and does not host them. If you are a rights holder with a concern, contact us on Telegram.
 
-
 ## Changes to this policy
 
 If Onda’s behaviour changes in a way that affects privacy, we will update this policy and its date before the change reaches the app.
 
-
 ## Contact
 
 Questions, requests or concerns: @ErikasAdo on Telegram (t.me/ErikasAdo).
-
-
