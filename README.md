@@ -319,4 +319,4 @@ a small quota per key/network before being blocked — this caps abuse, it doesn
 **App ID is now `com.erikasado.onda`** (was `com.erikas.onda`). It's a different app to Android: uninstall any older build first, and sign with the same keystore as before.
 
 ## Licence
-Onda is free software under the **GNU GPL v3 or later**. See `LICENSE`. F-Droid steps: `FDROID.md`.
+Onda is free software under the **GNU GPL v3 or later**. See `LICENSE`.
